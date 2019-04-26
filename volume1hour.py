@@ -116,37 +116,37 @@ def eth_cond(data):
         slack_msg(msg)
 
 
-def trx_cond(data):
+# def trx_cond(data):
     # if data['volume'][-2] > 20*data['volume'][-3]:
     #     msg = 'TRX: 1min: Volume 20 times'
     #     slack_msg(msg)
 
 
-def eos_cond(data):
+# def eos_cond(data):
     # if data['volume'][-2] > 20*data['volume'][-3]:
     #     msg = 'EOS: 1min: Volume 20 times'
     #     slack_msg(msg)
 
 
-def ltc_cond(data):
+# def ltc_cond(data):
     # if data['volume'][-2] > 20*data['volume'][-3]:
     #     msg = 'LTC: 1min: Volume 20 times'
     #     slack_msg(msg)
 
 
-def bch_cond(data):
+# def bch_cond(data):
     # if data['volume'][-2] > 20*data['volume'][-3]:
     #     msg = 'BCH: 1min: Volume 20 times'
     #     slack_msg(msg)
 
 
-def xrp_cond(data):
+# def xrp_cond(data):
     # if data['volume'][-2] > 20*data['volume'][-3]:
     #     msg = 'XRP: 1min: Volume 20 times'
     #     slack_msg(msg)
 
 
-def ada_cond(data):
+# def ada_cond(data):
     # if data['volume'][-2] > 20*data['volume'][-3]:
     #     msg = 'ADA: 1min: Volume 20 times'
     #     slack_msg(msg)
@@ -175,11 +175,11 @@ if __name__ == '__main__':
             dfpair = get_volume_data(client)
             xbt_cond(dfpair[0])
             eth_cond(dfpair[1])
-            trx_cond(dfpair[2])
-            ada_cond(dfpair[3])
-            bch_cond(dfpair[4])
-            ltc_cond(dfpair[5])
-            eos_cond(dfpair[6])
-            xrp_cond(dfpair[7])
+            # trx_cond(dfpair[2])
+            # ada_cond(dfpair[3])
+            # bch_cond(dfpair[4])
+            # ltc_cond(dfpair[5])
+            # eos_cond(dfpair[6])
+            # xrp_cond(dfpair[7])
 
             time.sleep(3598)

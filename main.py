@@ -117,39 +117,39 @@ def eth_cond(data):
 
 
 def trx_cond(data):
-    if data['volume'][-2] > 20*data['volume'][-3]:
-        msg = 'TRX: 1min: Volume 20 times'
-        slack_msg(msg)
+    # if data['volume'][-2] > 20*data['volume'][-3]:
+    #     msg = 'TRX: 1min: Volume 20 times'
+    #     slack_msg(msg)
 
 
 def eos_cond(data):
-    if data['volume'][-2] > 20*data['volume'][-3]:
-        msg = 'EOS: 1min: Volume 20 times'
-        slack_msg(msg)
+    # if data['volume'][-2] > 20*data['volume'][-3]:
+    #     msg = 'EOS: 1min: Volume 20 times'
+    #     slack_msg(msg)
 
 
 def ltc_cond(data):
-    if data['volume'][-2] > 20*data['volume'][-3]:
-        msg = 'LTC: 1min: Volume 20 times'
-        slack_msg(msg)
+    # if data['volume'][-2] > 20*data['volume'][-3]:
+    #     msg = 'LTC: 1min: Volume 20 times'
+    #     slack_msg(msg)
 
 
 def bch_cond(data):
-    if data['volume'][-2] > 20*data['volume'][-3]:
-        msg = 'BCH: 1min: Volume 20 times'
-        slack_msg(msg)
+    # if data['volume'][-2] > 20*data['volume'][-3]:
+    #     msg = 'BCH: 1min: Volume 20 times'
+    #     slack_msg(msg)
 
 
 def xrp_cond(data):
-    if data['volume'][-2] > 20*data['volume'][-3]:
-        msg = 'XRP: 1min: Volume 20 times'
-        slack_msg(msg)
+    # if data['volume'][-2] > 20*data['volume'][-3]:
+    #     msg = 'XRP: 1min: Volume 20 times'
+    #     slack_msg(msg)
 
 
 def ada_cond(data):
-    if data['volume'][-2] > 20*data['volume'][-3]:
-        msg = 'ADA: 1min: Volume 20 times'
-        slack_msg(msg)
+    # if data['volume'][-2] > 20*data['volume'][-3]:
+    #     msg = 'ADA: 1min: Volume 20 times'
+    #     slack_msg(msg)
 
 
 def slack_msg(msg):

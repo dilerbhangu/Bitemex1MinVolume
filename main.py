@@ -19,8 +19,8 @@ def get_volume_data(client):
     dfxtb = get_ohlcv(dfxbt)
     dfeth = get_ohlcv(dfeth)
 
-    dfpair.append(dfxbt)
     dfpair.append(dfeth)
+    dfpair.append(dfxbt)
 
     return dfpair
 
@@ -64,7 +64,7 @@ if __name__ == '__main__':
             time.sleep(1)
             dfpair=get_volume_data(client)
             print(dfpair)
-            print_vol_xbt(dfpair[0])
+            print_vol_eth(dfpair[0])
             print('-----------------------')
-            print_vol_eth(dfpair[1])
+            print_vol_xbt(dfpair[1])
             time.sleep(58)

@@ -63,6 +63,7 @@ if __name__ == '__main__':
         if one_min:
             time.sleep(1)
             dfpair=get_volume_data(client)
+            print(dfpair)
             print_vol_xbt(dfpair[0])
             print('-----------------------')
             print_vol_eth(dfpair[1])

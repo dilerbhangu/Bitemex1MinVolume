@@ -106,13 +106,13 @@ def get_ohlcv(df):
 
 def xbt_cond(data):
     if data['volume'][-2] > 4*data['volume'][-3]:
-        msg = 'XBTUSD: 1min: Volume 20 times'
+        msg = 'XBTUSD: 1 Hour: Volume 20 times'
         slack_msg(msg)
 
 
 def eth_cond(data):
     if data['volume'][-2] > 4*data['volume'][-3]:
-        msg = 'ETHUSD: 1min: Volume 20 times'
+        msg = 'ETHUSD: 1 Hour: Volume 20 times'
         slack_msg(msg)
 
 

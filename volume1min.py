@@ -111,7 +111,7 @@ def xbt_cond(data):
 
 
 def eth_cond(data):
-    if data['volume'][-2] > 20*data['volume'][-3]:
+    if data['volume'][-2] > 40*data['volume'][-3]:
         msg = 'ETHUSD: 1min: Volume 20 times'
         slack_msg(msg)
 

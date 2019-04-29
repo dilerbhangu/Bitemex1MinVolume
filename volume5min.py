@@ -105,15 +105,15 @@ def get_ohlcv(df):
 
 
 def xbt_cond(data):
-    if data['volume'][-2] > 10*data['volume'][-3]:
+    if data['volume'][-2] > 20000000:
         msg = 'XBTUSD: 5 min: Volume 10 times'
         slack_msg(msg)
 
 
-def eth_cond(data):
-    if data['volume'][-2] > 10*data['volume'][-3]:
-        msg = 'ETHUSD: 5 min: Volume 10 times'
-        slack_msg(msg)
+# def eth_cond(data):
+#     if data['volume'][-2] > 10*data['volume'][-3]:
+#         msg = 'ETHUSD: 5 min: Volume 10 times'
+#         slack_msg(msg)
 
 
 # def trx_cond(data):
@@ -174,7 +174,7 @@ if __name__ == '__main__':
             time.sleep(1)
             dfpair = get_volume_data(client)
             xbt_cond(dfpair[0])
-            eth_cond(dfpair[1])
+            #eth_cond(dfpair[1])
             # trx_cond(dfpair[2])
             # ada_cond(dfpair[3])
             # bch_cond(dfpair[4])

@@ -106,7 +106,7 @@ def get_ohlcv(df):
 
 def xbt_cond(data):
     if data['volume'][-2] > 20000000:
-        msg = 'XBTUSD: 5 min: Volume 10 times'
+        msg = 'XBTUSD: 5 min: Volume is '+ str(data['volume'][-2])
         slack_msg(msg)
 
 
@@ -182,4 +182,4 @@ if __name__ == '__main__':
             # eos_cond(dfpair[6])
             # xrp_cond(dfpair[7])
 
-            time.sleep(298)
+            time.sleep(290)

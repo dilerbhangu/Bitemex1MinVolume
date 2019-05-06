@@ -37,9 +37,6 @@ def xbt_cond(data):
     close = data['close'][-2]
     open = data['open'][-2]
 
-    print(volume)
-    print(close)
-    print(open)
     result = strategy.place_order(volume, close, open)
     if result == 1:
         msg = 'XBTUSD: 5 min: Volume is ' + str(data['volume'][-2]) + ': '
@@ -75,16 +72,17 @@ def check_order_filled():
                         msg = 'Order Filled With Profit and excute price: ' + \
                             str(order_status[0][0]['price'])
                         slack_msg(msg)
+                        client.Order.Order_cancelAll().result()
                         return
 
                     if order_status[0][1]['ordStatus'] == 'Filled':
                         msg = 'Order Filled With Loss and excute price: ' + \
                             str(order_status[0][0]['price'])
                         slack_msg(msg)
+                        client.Order.Order_cancelAll().result()
                         return
 
                     time.sleep(10)
-
             time.sleep(10)
         else:
             client.Order.Order_cancelAll().result()
@@ -109,13 +107,17 @@ def slack_msg(msg):
 
 if __name__ == '__main__':
     while True:
-        one_min = round(time.time()) % 300 == 0
+        try:
+            one_min = round(time.time()) % 300 == 0
+            if one_min:
+                time.sleep(1)
+                dfxbt = get_volume_data(client)
+                result = xbt_cond(dfxbt)
+                if result == 1:
+                    result = check_order_filled()
+                else:
+                    time.sleep(290)
 
-        if one_min:
-            time.sleep(1)
-            dfxbt = get_volume_data(client)
-            result = xbt_cond(dfxbt)
-            if result == 1:
-                result = check_order_filled()
-            else:
-                time.sleep(290)
+        except Exception as e:
+            msg = 'Something Goes Wrong,Re-Run Script'
+            slack_msg(msg)

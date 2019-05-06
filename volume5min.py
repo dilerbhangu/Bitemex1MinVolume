@@ -58,34 +58,39 @@ def xbt_cond(data):
 
 
 def check_order_filled():
+    set_time = round(Time.time()) + 300
     while True:
-        # set_time = round(Time.time()) + 300
         order_status = client.Order.Order_getOrders(
             symbol='XBTUSD', count=2, reverse=True).result()
+        if Time.time() <= set_time and order_status[0][0]['ordStatus'] != 'Canceled':
+            if order_status[0][0]['ordStatus'] == 'Filled':
+                msg = 'XBTUSD: Order Filled at Price '+str(order_status[0][0]['price'])
+                slack_msg(msg)
 
-        if order_status[0][0]['ordStatus'] == 'Filled':
-            msg = 'XBTUSD: Order Filled at Price '+str(order_status[0][0]['price'])
+                while True:
+                    order_status = client.Order.Order_getOrders(
+                        symbol='XBTUSD', count=2, reverse=True).result()
+
+                    if order_status[0][0]['ordStatus'] == 'Filled':
+                        msg = 'Order Filled With Profit and excute price: ' + \
+                            str(order_status[0][0]['price'])
+                        slack_msg(msg)
+                        return
+
+                    if order_status[0][1]['ordStatus'] == 'Filled':
+                        msg = 'Order Filled With Loss and excute price: ' + \
+                            str(order_status[0][0]['price'])
+                        slack_msg(msg)
+                        return
+
+                    time.sleep(10)
+
+            time.sleep(10)
+        else:
+            client.Order.Order_cancelAll().result()
+            msg = 'XBTUSD: Cancel All Orders'
             slack_msg(msg)
-
-            while True:
-                order_status = client.Order.Order_getOrders(
-                    symbol='XBTUSD', count=2, reverse=True).result()
-
-                if order_status[0][0]['ordStatus'] == 'Filled':
-                    msg = 'Order Filled With Profit and excute price: ' + \
-                        str(order_status[0][0]['price'])
-                    slack_msg(msg)
-                    return
-
-                if order_status[0][1]['ordStatus'] == 'Filled':
-                    msg = 'Order Filled With Loss and excute price: ' + \
-                        str(order_status[0][0]['price'])
-                    slack_msg(msg)
-                    return
-
-                time.sleep(10)
-
-        time.sleep(10)
+            return
 
 
 def slack_msg(msg):

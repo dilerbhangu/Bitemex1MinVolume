@@ -4,6 +4,8 @@ import pandas as pd
 from keys import ID, SECRET, SLACK_TOKEN
 from slackclient import SlackClient
 from strategy import Strategy
+import json
+
 
 sc = SlackClient(SLACK_TOKEN)
 client = bitmex.bitmex(test=False, api_key=ID, api_secret=SECRET)
@@ -55,27 +57,35 @@ def xbt_cond(data):
 
 
 def check_order_filled():
-    set_time = round(Time.time()) + 300
+    set_time = round(time.time()) + 300
+    order_ID = strategy.get_order_ID()
+    print(order_ID)
     while True:
-        order_status = client.Order.Order_getOrders(
-            symbol='XBTUSD', count=2, reverse=True).result()
-        if Time.time() <= set_time and order_status[0][0]['ordStatus'] != 'Canceled':
-            if order_status[0][0]['ordStatus'] == 'Filled':
+        check_filled = client.Order.Order_getOrders(
+            symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[0]})).result()
+        print(check_filled)
+        print('Order Status {}'.format(check_filled[0][0]['ordStatus']))
+
+        if time.time() <= set_time:
+            if check_filled[0][0]['ordStatus'] == 'Filled':
                 msg = 'XBTUSD: Order Filled at Price '+str(order_status[0][0]['price'])
                 slack_msg(msg)
-
+                time.sleep(5)
                 while True:
-                    order_status = client.Order.Order_getOrders(
-                        symbol='XBTUSD', count=2, reverse=True).result()
+                    order_status_stop = client.Order.Order_getOrders(
+                        symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[1]})).result()
 
-                    if order_status[0][0]['ordStatus'] == 'Filled':
+                    if order_status_stop[0][0]['ordStatus'] == 'Filled':
                         msg = 'Order Filled With Profit and excute price: ' + \
                             str(order_status[0][0]['price'])
                         slack_msg(msg)
                         client.Order.Order_cancelAll().result()
                         return
 
-                    if order_status[0][1]['ordStatus'] == 'Filled':
+                    order_status_stop = client.Order.Order_getOrders(
+                        symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[2]})).result()
+
+                    if order_status[0][0]['ordStatus'] == 'Filled':
                         msg = 'Order Filled With Loss and excute price: ' + \
                             str(order_status[0][0]['price'])
                         slack_msg(msg)
@@ -119,5 +129,5 @@ if __name__ == '__main__':
                     time.sleep(290)
 
         except Exception as e:
-            msg = 'Something Goes Wrong,Re-Run Script'
+            msg = 'Exception'+str(e)
             slack_msg(msg)

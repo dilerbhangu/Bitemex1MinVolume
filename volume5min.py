@@ -68,7 +68,7 @@ def check_order_filled():
 
         if time.time() <= set_time:
             if check_filled[0][0]['ordStatus'] == 'Filled':
-                msg = 'XBTUSD: Order Filled at Price '+str(order_status[0][0]['price'])
+                msg = 'XBTUSD: Order Filled at Price '+str(check_filled[0][0]['price'])
                 slack_msg(msg)
                 time.sleep(5)
                 while True:
@@ -77,17 +77,17 @@ def check_order_filled():
 
                     if order_status_stop[0][0]['ordStatus'] == 'Filled':
                         msg = 'Order Filled With Profit and excute price: ' + \
-                            str(order_status[0][0]['price'])
+                            str(order_status_stop[0][0]['price'])
                         slack_msg(msg)
                         client.Order.Order_cancelAll().result()
                         return
 
-                    order_status_stop = client.Order.Order_getOrders(
+                    order_status_profit = client.Order.Order_getOrders(
                         symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[2]})).result()
 
                     if order_status[0][0]['ordStatus'] == 'Filled':
                         msg = 'Order Filled With Loss and excute price: ' + \
-                            str(order_status[0][0]['price'])
+                            str(order_status_profit[0][0]['price'])
                         slack_msg(msg)
                         client.Order.Order_cancelAll().result()
                         return

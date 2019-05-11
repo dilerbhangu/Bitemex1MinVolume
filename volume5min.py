@@ -14,9 +14,15 @@ strategy = Strategy(client)
 
 
 def get_volume_data(client):
-
-    dfxbt = client.Trade.Trade_getBucketed(
-        binSize='5m', reverse=True, symbol='XBTUSD', count=10, partial=True).result()[0]
+    while True:
+        try:
+            dfxbt = client.Trade.Trade_getBucketed(
+                binSize='5m', reverse=True, symbol='XBTUSD', count=10, partial=True).result()[0]
+        except Exception as e:
+            time.sleep(1)
+            continue
+        else:
+            break
 
     if len(dfxbt) != 0:
         dfxbt = get_ohlcv(dfxbt)
@@ -59,11 +65,18 @@ def xbt_cond(data):
 def check_order_filled():
     set_time = round(time.time()) + 300
     order_ID = strategy.get_order_ID()
-    print(order_ID)
+    # print(order_ID)
     while True:
-        check_filled = client.Order.Order_getOrders(
-            symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[0]})).result()
-        #print(check_filled)
+        while True:
+            try:
+                check_filled = client.Order.Order_getOrders(
+                    symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[0]})).result()
+            except Exception as e:
+                time.sleep(1)
+                continue
+            else:
+                break
+        # print(check_filled)
         #print('Order Status {}'.format(check_filled[0][0]['ordStatus']))
 
         if time.time() <= set_time:
@@ -72,8 +85,15 @@ def check_order_filled():
                 slack_msg(msg)
                 time.sleep(5)
                 while True:
-                    order_status_stop = client.Order.Order_getOrders(
-                        symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[1]})).result()
+                    while True:
+                        try:
+                            order_status_stop = client.Order.Order_getOrders(
+                                symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[1]})).result()
+                        except Exception as e:
+                            time.sleep(1)
+                            continue
+                        else:
+                            break
 
                     if order_status_stop[0][0]['ordStatus'] == 'Filled':
                         msg = 'Order Filled With Profit and excute price: ' + \
@@ -82,8 +102,15 @@ def check_order_filled():
                         client.Order.Order_cancelAll().result()
                         return
 
-                    order_status_profit = client.Order.Order_getOrders(
-                        symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[2]})).result()
+                    while True:
+                        try:
+                            order_status_profit = client.Order.Order_getOrders(
+                                symbol='XBTUSD', count=2, reverse=True, filter=json.dumps({"orderID": order_ID[2]})).result()
+                        except Exception as e:
+                            time.sleep(1)
+                            continue
+                        else:
+                            break
 
                     if order_status_profit[0][0]['ordStatus'] == 'Filled':
                         msg = 'Order Filled With Loss and excute price: ' + \
@@ -95,7 +122,14 @@ def check_order_filled():
                     time.sleep(10)
             time.sleep(10)
         else:
-            client.Order.Order_cancelAll().result()
+            while True:
+                try:
+                    client.Order.Order_cancelAll().result()
+                except Exception as e:
+                    time.sleep(1)
+                    continue
+                else:
+                    break
             msg = 'XBTUSD: Cancel All Orders'
             slack_msg(msg)
             return
